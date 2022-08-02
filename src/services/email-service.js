@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer');
 const config = require('../config');
-const templates = require('../utils/templates');
+const emailTemplate = require('../utils/email-template');
 
 module.exports = class Email {
   constructor(user, url) {
@@ -46,17 +46,25 @@ module.exports = class Email {
     await this.newTransport().sendMail(mailOptions);
   }
 
-  async sendWelcome() {
-    await this.send('welcome', `Welcome to the ${config.APP_NAME} Family!`);
-  }
-
   async sendVerifyEmail() {
-    await this.send(templates.verifyEmailTemplate(this.firstName, this.url), 'Verify Email Address');
+    const title = 'Confirm Your Email Address';
+    const description = `Tap the button below to confirm your email address. If you didn't create an account, you can safely delete this email.`;
+    const buttonText = 'Verify Email Address';
+
+    const template = emailTemplate({ title, description, buttonText, name: this.firstName, url: this.url });
+
+    await this.send(template, 'Verify Email Address');
   }
 
   async sendPasswordReset() {
+    const title = 'Reset Your Password';
+    const description = `Tap the button below to reset your customer account password. If you didn't request a new password, you can safely delete this email.`;
+    const buttonText = 'Reset Password';
+
+    const template = emailTemplate({ title, description, buttonText, name: this.firstName, url: this.url });
+
     await this.send(
-      templates.forgotEmailTemplate(this.firstName, this.url),
+      template,
       `Your password reset token (valid for only ${process.env.PASSWORD_RESET_TOKEN_EXPIRES_IN} minutes)`
     );
   }
