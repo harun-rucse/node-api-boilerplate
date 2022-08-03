@@ -91,7 +91,7 @@ PATCH /api/users/update-me [private]
 ```
 
 ```
-GET /api/users [admin]
+GET /api/users [private]
 ```
 
 ```
@@ -109,3 +109,7 @@ PATCH /api/users/:id [admin]
 ```
 DELETE /api/users/:id [admin]
 ```
+
+## API Documentation
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://god.gw.postman.com/run-collection/11943934-cf3f1da6-9230-4786-8553-6d5c40e77075?action=collection%2Ffork&collection-url=entityId%3D11943934-cf3f1da6-9230-4786-8553-6d5c40e77075%26entityType%3Dcollection%26workspaceId%3De40e7746-d7c1-4cf3-a619-0b76b4aa7f9f#?env%5BAPI%3APROD%5D=W3sia2V5IjoidXJsIiwidmFsdWUiOiJodHRwczovL3RkZC1ub2RlLWFwaS1ib2lsZXJwbGF0ZS5oZXJva3VhcHAuY29tIiwiZW5hYmxlZCI6dHJ1ZX0seyJrZXkiOiJwYXNzd29yZCIsInZhbHVlIjoicGFzc3dvcmQiLCJlbmFibGVkIjp0cnVlfSx7ImtleSI6Imp3dCIsInZhbHVlIjoiIiwiZW5hYmxlZCI6dHJ1ZX1d)
