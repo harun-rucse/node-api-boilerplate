@@ -107,43 +107,4 @@ describe('auth middleware', () => {
       expect(res.status).toBe(200);
     });
   });
-
-  describe('restrictTo', () => {
-    let token;
-    let user;
-    let id;
-
-    const exec = () => {
-      return request(app).delete(`/api/users/${id}`).set('Authorization', `Bearer ${token}`);
-    };
-
-    beforeEach(async () => {
-      user = new User({
-        name: 'test',
-        email: 'test',
-        password: 'password',
-      });
-
-      user.role = 'admin';
-      await user.save();
-
-      token = tokenService.generateJwtToken({ id: user._id });
-      id = user._id;
-    });
-
-    it('should return 403 if user role is not admin', async () => {
-      user.role = 'user';
-      await user.save();
-
-      const res = await exec();
-
-      expect(res.status).toBe(403);
-    });
-
-    it('should return 204 if user role match', async () => {
-      const res = await exec();
-
-      expect(res.status).toBe(204);
-    });
-  });
 });

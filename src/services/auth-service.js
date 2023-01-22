@@ -28,10 +28,10 @@ const register = async (payload) => {
   try {
     await new Email(user, verifyUrl).sendVerifyEmail();
   } catch (err) {
-    user.emailVerifyToken = undefined;
-    await user.save({ validateBeforeSave: false });
+    // delete user from the database if there is an error sending the email
+    await userService.deleteOneUser({ _id: user._id });
 
-    throw new AppError('There was an error sending the email.', 500);
+    throw new AppError('There was an error sending the email. Please try again!', 500);
   }
 
   return user;
