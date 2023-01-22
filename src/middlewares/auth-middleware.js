@@ -33,20 +33,10 @@ const protect = catchAsync(async (req, res, next) => {
   next();
 });
 
-const restrictTo = (...roles) => {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      return next(new AppError('You do not have permission to perform this action.', 403));
-    }
-
-    next();
-  };
-};
-
 const verified = (req, res, next) => {
   if (req.user.isVerified) return next();
 
   return next(new AppError('Your email address is not verified.', 403));
 };
 
-module.exports = { protect, restrictTo, verified };
+module.exports = { protect, verified };

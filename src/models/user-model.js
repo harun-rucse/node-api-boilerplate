@@ -2,6 +2,7 @@ const Joi = require('joi');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const { Schema, model } = mongoose;
+const { Role } = require('./role-model');
 
 const userSchema = new Schema(
   {
@@ -24,8 +25,9 @@ const userSchema = new Schema(
       default: 'default.jpeg',
     },
     role: {
-      type: String,
-      default: 'user',
+      type: Schema.Types.ObjectId,
+      ref: Role.modelName,
+      default: '630b78585e407325228fb79a',
     },
     passwordChangeAt: Date,
     passwordResetToken: String,
@@ -58,6 +60,13 @@ userSchema.pre('save', function (next) {
   next();
 });
 
+// Pre find hook that populate the role
+userSchema.pre(/^find/, function (next) {
+  this.populate('role', 'name slug deletable');
+
+  next();
+});
+
 // Return true if password is correct, otherwise return false
 userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
   return await bcrypt.compare(candidatePassword, userPassword);
@@ -78,7 +87,7 @@ const validateUser = (user) => {
     email: Joi.string().email().required().label('Email'),
     password: Joi.string().min(4).max(20).required().label('Password'),
     avatar: Joi.string().label('Avatar'),
-    role: Joi.string().valid('user', 'admin').label('Role'),
+    role: Joi.string().label('Role'),
   });
 
   return schema.validate(user);
@@ -89,7 +98,7 @@ const validateUserUpdate = (user) => {
     name: Joi.string().label('Name'),
     email: Joi.string().email().label('Email'),
     avatar: Joi.string().label('Avatar'),
-    role: Joi.string().valid('user', 'admin').label('Role'),
+    role: Joi.string().label('Role'),
     emailVerifiedAt: Joi.date().label('Email Verified At'),
   });
 
